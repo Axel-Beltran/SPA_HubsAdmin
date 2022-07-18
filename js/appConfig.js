@@ -1,0 +1,1 @@
+﻿var serverUrl = "https://localhost:7061";

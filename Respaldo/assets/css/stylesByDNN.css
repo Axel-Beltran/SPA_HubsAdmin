@@ -1,0 +1,23 @@
+#bg-light {
+background-color: #39445C !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+color: aliceblue !important;
+font-size: 15px !important;
+}
+
+.modal-dialog {
+max-width: 80% !important;
+margin: 1.75rem auto !important;
+}
+
+.btn-primary {
+color: #fff;
+background-color: #398CBF !important;
+border-color: #398CBF !important;
+}
+
+.page-content{
+    padding: inherit !important;
+}

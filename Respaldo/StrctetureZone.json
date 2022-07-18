@@ -1,0 +1,60 @@
+[
+  {
+   "IdZone" : 1,
+   "ZonaName" : "Metro",
+    "SubRegionDto" : [{
+      "IdRegion": 1,
+      "IdZone" : 1,
+       "RegionName": "METRO",
+       "HubsDto" : [{
+           "IdHub" : 660109,
+           "IdRegion" : 1,
+           "HubName" : "San_Angel",
+        "CmtsDtos": [{
+            "IdCmts" :  3501006,
+            "IdHub" : 660109,
+            "CmtsName" : "CASA_SAN_ANGEL_7"
+
+        }]
+       }]
+      }]
+   },{
+    "IdZone" : 2,
+    "ZonaName" : "Interior",
+     "SubRegionDto" : [{
+       "IdRegion": 1,
+       "IdZone" : 2,
+        "RegionName": "PACIFICO NORTE",
+        "HubsDto" : [{
+            "IdHub" : 491520,
+            "IdRegion" : 1,
+            "HubName" : "Tijuana",
+         "CmtsDtos": [{
+             "IdCmts" :  3510450,
+             "IdHub" : 491520,
+             "CmtsName" : "CISCO_CBR8_Tij_Hub2_14"
+ 
+         }]
+        }]
+       }]
+    },{
+        "IdZone" : 3,
+        "ZonaName" : "Norte",
+         "SubRegionDto" : [{
+           "IdRegion": 1,
+           "IdZone" : 3,
+            "RegionName": "MONTERREY",
+            "HubsDto" : [{
+                "IdHub" : 1496319,
+                "IdRegion" : 1,
+                "HubName" : "MM_Sabinas_Hidalgo",
+             "CmtsDtos": [{
+                 "IdCmts" :  3979186,
+                 "IdHub" : 1496319,
+                 "CmtsName" : "SH0405"
+     
+             }]
+            }]
+           }]
+        }
+]

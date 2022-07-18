@@ -1,0 +1,481 @@
+<div class="main-content-fluid" ng-init='startInfo()'>
+    <div class="page-content">
+        <div id="main" class="container-fluid">
+            <!--start page title-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Usuarios</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a>Administración</a></li>
+                                <li class="breadcrumb-item active">Usuario</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- inicio de usuario -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6" style="text-align: right">
+                                    <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunningUsers">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <div class="row" id="newUserDiv" style="cursor: pointer;">
+                                    <div class="col-md-3 pull-left">
+                                        <a class="dropdown-icon-item" ng-model="modelUser" ng-click="newUser()" data-toggle="modal" data-target="#exampleModalLong">
+                                            <i class="fas fa-address-card"></i>
+                                            <span>Agregar nuevo usuario</span>
+                                        </a>
+                                    </div>
+                                </div>                                                    
+                            <p>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="dripicons-user-group"></i></div>
+                                            <input type="text" class="form-control" ng-model="clientSearch" placeholder="Filtro por nombre">
+                                        </div>
+                                    </div>
+                                </div>
+                            <p>
+                            <p>
+                            <p>
+                            <p>
+                                <div class="col-md-6">
+                                    <h4 class="card-title mb-3">Usuarios existentes:
+                                        <div ng-show="!RunnigGetUsers" class="spinner-border text-primary m-1" role="status" style="text-align: right" >
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </h4>
+                                   
+                                </div>
+                                
+                            <p>
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="usersTable" ng-table="tblPaginado" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Usuario</th>
+                                                    <th>Email</th>
+                                                    <th>Rol</th>
+                                                    <th>Spa</th>
+                                                    <th>Ultima Sesión</th>
+                                                    <th>Fecha de alta</th>
+                                                    <th>Editar</th>
+                                                    <th>Desactivar</th>
+                                                    <th>Eliminar</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="user in $data = (filterList | filter: clientSearch ) | start: (currentPage - 1) * perPage | limitTo: perPage  ">
+                                                <td>{{user.Name + ' ' + user.LastName}} </td>
+                                                <td>{{user.UserName}}</td>
+                                                <td>{{user.Email}}</td>
+                                                <td>{{user.ProcessRole.RoleName}}</td>
+                                                <td>{{user.ProcessRole.Process.ProcessName}}</td>
+                                                <td>{{user.LastSession}}</td>
+                                                <td>{{user.RegisterDate}}</td>
+                                                <td ng-hide="!editUser">
+                                                    <a class="btn btn-outline-secondary btn-sm edit" ng-model="btnEdit" ng-click="showEditUsersModal(user)" >
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </a>
+                                                </td>
+                                                <td ng-hide="!deleteUser">
+                                                    <a ng-if="user.Active == 1" class="btn btn-outline-secondary btn-sm deleted" ng-click="userDeactivate(user,0)">
+                                                        <i class="bx bxs-user-x" title="Desactivar"></i>
+                                                    </a>
+                                                    <a ng-if="user.Active == 0 " class="btn btn-outline-secondary btn-sm deleted" ng-click="userDeactivate(user,1)">
+                                                        <i class="bx bx-check-circle" title="Activar"></i>
+                                                    </a>
+                                                </td>
+                                                
+                                                <td >
+                                                    <a class="btn btn-outline-secondary btn-sm deleted" ng-click="userDelete(user)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>  
+                                        <div class='btn-group'>
+                                            <button type='button' class='btn btn-primary' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'> <i class="fas fa-angle-left"></i>  <i class="fas fa-angle-left"></i></button>
+                                            <button type='button' class='btn btn-primary' ng-disabled='currentPage >= users.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'> <i class="fas fa-angle-right"></i> <i class="fas fa-angle-right"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <div class="col-md-12">
+
+                                </div>
+                    </div>
+                </div>
+            </div>
+    <!-- Fin de usuario -->
+
+         <!-- parte de editado -->
+            <div class="row" ng-show="swEdit">
+                <div class="col-lg-12">
+                    <div class="col-sm-12">
+                        <div>
+                            <div class="row">
+                                <div class=" col-md-6">
+                                    <h4 class="card-title mb-3">Editar Usario:
+                                    </div>
+                                <div class="col-md-6" style="text-align:right">
+                                    <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunningProcess">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="card">
+                                    <div class="card-body">
+                                     
+                                        <div class="tab-content mt-4">
+                                            <div class="tab-pane active" id="ProcessScreen-tab" role="tabpanel">
+                                                <form>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-firstname-input" class="col-sm-3 col-form-label">Nombre</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="usuarioSeleccionado.Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-lastname-input" class="col-sm-3 col-form-label">Apellido</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-lastname-input" ng-model="usuarioSeleccionado.LastName">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-user-input" class="col-sm-3 col-form-label">Usuario</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-text"><i class="dripicons-user"></i></div>
+                                                                <input type="text" class="form-control" id="horizontal-user-input" ng-model="usuarioSeleccionado.UserName" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-mail-input" class="col-sm-3 col-form-label">Correo</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-text"><i class="dripicons-mail"></i></div>
+                                                                <input type="text" class="form-control" id="horizontal-mail-input" ng-model="usuarioSeleccionado.Email">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-active-input" class="col-sm-3 col-form-label">Activo</label>
+                                                        <div class="col-sm-9">
+                                
+                                                            <select class="form-select" id="userEstateSelect" aria-label="Floating label select example" ng-model="usuarioSeleccionado.Active">
+                                                                <option value="0">INACTIVO</option>
+                                                                <option value="1">ACTIVO</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-role-input" class="col-sm-3 col-form-label">Rol</label>
+                                                        <div class="col-sm-9">
+                                                            <select ng-change="SelectProcess(usuarioSeleccionado)" class="form-select" id="userRolesSelect" aria-label="Floating label select example" ng-model="usuarioSeleccionado.RoleId">
+                                                                <option ng-selected="usuarioSeleccionado.RoleId == role.RoleId"
+                                                                ng-repeat="role in userRoles" value="{{role.RoleId}}">{{role.RoleName}}
+                                                                </option>        
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-role-input" class="col-sm-3 col-form-label">Spa</label>
+                                                        <div class="col-sm-9">
+                                                            <select disabled class="form-select" id="userRolesSelect" aria-label="Floating label select example" ng-model="ngProcess">
+                                                                <option ng-selected="usuarioSeleccionado.RoleId == role.RoleId" 
+                                                                ng-repeat="role in userRoles"  value="{{role.Process.ProcessId}}">{{role.Process.ProcessName}}
+                                                                </option>        
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                 
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-registerdate-input" class="col-sm-3 col-form-label">Fecha de registro</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-registerdate-input" ng-model="usuarioSeleccionado.RegisterDate" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-registeruser-input" class="col-sm-3 col-form-label">Usuario que registro</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-registeruser-input" ng-model="usuarioSeleccionado.RegisterUser" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultima sesión</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastSession" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultima actualización</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastModify" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultimo usuario que actualizo</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastUserModifying" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-end">
+                                                        <div class="col-sm-9">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    ng-click=userUpdate()>
+                                                                Actualizar usuario
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                           
+                                         
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- parte de editado -->
+        </div>
+        <!--end page title-->
+    </div>  <!--container-fluid-->
+</div>
+     <!-- Modal -->
+     <div class="modal fade bd-example-modal" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Busqueda de usuarios en active directory</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                
+
+                <div class="row" id="deviceConnectedCard">
+                    <div  class="col-xl-12 col-md-12">
+                    <div class="modal-body">
+                        <p class="h4 mb-4">Busqueda de usuarios en active directory</p>
+                        <div class="row">
+                        </div>
+                        <form ng-submit="submit()">
+                            <div class="row">
+                                <div class="col-md-11">
+                                <div class="input-group">
+                                    <div class="input-group-text"><i class="dripicons-user-group"></i></div>
+                                    <input id="txtSearchUser" type="text" class="form-control" ng-model="SearchLdapUser" placeholder="Busqueda de usuarios ldap">
+                                    <button type="submit" class='btn btn-primary' ng-click="getLdapUserByFilter(SearchLdapUser)">Buscar</button>
+                                </div>
+                                </div>
+                                <div class="col-md-1" style="text-align: right">
+                                <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunningSearchUsers">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                </div>
+                            </div>
+                            <p>
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                <table id="usersTable" ng-table="tblPaginado" class="table table-bordered dt-responsive  nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Rol</th>
+                                            <th>SPA</th>
+                                            <th>Agregar</th>
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="user in ldapUsers">
+                                        <td>{{user.Name}} </td>
+                                        <td>{{user.LastName}}</td>
+                                        <td>{{user.UserName}}</td>
+                                        <td>{{user.Email}}</td>
+                                        <td>
+                                            <select class="form-control" id="userRolesSelect"  aria-label="Floating label select example" ng-model="roles"
+                                            ng-options="c as c.RoleName for c in userRoles track by c.RoleName" >
+                                            <option value="">Seleccione</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            {{roles.Process.ProcessName}}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" ng-checked="existsUserArray(user, selectedUsers)"
+                                            ng-click="addSearchUserArray(user, selectedUsers, roles.RoleId,roles.ProcessId)" />
+                                        </td>
+                                        <td>
+                                            <button type="submit" class='btn btn-primary' ng-click="deleteUserTable(user)">Quitar</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                </div>
+                                <!-- <button id="btnAgregarNuevo" type="submit" class='btn btn-primary' >Agregar usuario</button> -->
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary"  ng-click="ExistUser(selectedUsers)">Agregar usuario</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal fade bd-example-modal" id="EditUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <center><p class="h4 mb-4">Actualización de Rol</p></center>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                
+
+                <div class="row" id="deviceConnectedCard">
+                    <div  class="col-xl-12 col-md-12">
+                    <div class="modal-body">
+                        <!-- <p class="h4 mb-4">Actualización de Rol</p> -->
+                        <div class="row">
+                        </div>
+                        <form>
+                            <div class="row mb-4">
+                                <label for="horizontal-firstname-input" class="col-sm-3 col-form-label">Nombre</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="usuarioSeleccionado.Name">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-lastname-input" class="col-sm-3 col-form-label">Apellido</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-lastname-input" ng-model="usuarioSeleccionado.LastName">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-user-input" class="col-sm-3 col-form-label">Usuario</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <div class="input-group-text"><i class="dripicons-user"></i></div>
+                                        <input type="text" class="form-control" id="horizontal-user-input" ng-model="usuarioSeleccionado.UserName" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-mail-input" class="col-sm-3 col-form-label">Correo</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <div class="input-group-text"><i class="dripicons-mail"></i></div>
+                                        <input type="text" class="form-control" id="horizontal-mail-input" ng-model="usuarioSeleccionado.Email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-active-input" class="col-sm-3 col-form-label">Activo</label>
+                                <div class="col-sm-9">
+        
+                                    <select disabled class="form-control" id="userEstateSelect"  aria-label="Floating label select example" ng-model="usuarioSeleccionado.Active">
+                                        <option value="0">INACTIVO</option>
+                                        <option value="1">ACTIVO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-role-input" class="col-sm-3 col-form-label">Rol</label>
+                                <div class="col-sm-9">
+                                    <select ng-change="SelectProcess(usuarioSeleccionado)" class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="usuarioSeleccionado.RoleId">
+                                        <option ng-selected="usuarioSeleccionado.RoleId == role.RoleId"
+                                        ng-repeat="role in userRoles" value="{{role.RoleId}}">{{role.RoleName}}
+                                        </option>        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-role-input" class="col-sm-3 col-form-label">Spa</label>
+                                <div class="col-sm-9">
+                                    <select disabled class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="ngProcess">
+                                        <option ng-selected="usuarioSeleccionado.RoleId == role.RoleId" 
+                                        ng-repeat="role in userRoles"  value="{{role.Process.ProcessId}}">{{role.Process.ProcessName}}
+                                        </option>        
+                                    </select>
+                                </div>
+                            </div>
+         
+                            <div class="row mb-4">
+                                <label for="horizontal-registerdate-input" class="col-sm-3 col-form-label">Fecha de registro</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-registerdate-input" ng-model="usuarioSeleccionado.RegisterDate" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-registeruser-input" class="col-sm-3 col-form-label">Usuario que registro</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-registeruser-input" ng-model="usuarioSeleccionado.RegisterUser" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultima sesión</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastSession" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultima actualización</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastModify" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="horizontal-lastsesion-input" class="col-sm-3 col-form-label">Ultimo usuario que actualizo</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="horizontal-lastsesion-input" ng-model="usuarioSeleccionado.LastUserModifying" disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary"  ng-click="userUpdate();">Actualizar usuario</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+

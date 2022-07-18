@@ -1,0 +1,196 @@
+﻿<body ng-app="HubsAdminApp" ng-controller="HubsAdminController">
+    <div class="content">
+        <div class="container">
+            <h2 class="mb-5">Responsables</h2>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-success" ng-click="openCreateHubModal()">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="dripicons-user-group"></i></div>
+                        <input type="text" class="form-control" ng-model="responsiblesSearch" placeholder="Filtro de Responsables">
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <div class="table-responsive">
+                <div style="height: 420px;overflow: scroll;">
+                    <table class="table-fixed table table-bordered table-hover table-striped" id="tech-companies-1">
+                        <thead  style="position: sticky;top: 0" class="thead-dark">
+                            <tr>
+                                <th class="header text-center" scope="col">Editar</th>
+                                <th class="header text-center" scope="col">Eliminar</th>
+                                <th class="header text-center" scope="col">Nombre</th>
+                                <th class="header text-center" scope="col">Teléfono</th>
+                                <th class="header text-center" scope="col">E-mail</th>
+                                <th class="header text-center" scope="col">Nivel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-active" ng-repeat="item in service.getDirectoryHubs.response.directoryHubResponse | filter: responsiblesSearch">
+                                <td class="text-center">
+                                    <button type="button" id="updateButton" class="btn btn-warning" ng-click="getHubById(item)">
+                                        <i class="bi bi-box-arrow-in-up-right"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger" ng-click="deleteHub(item.id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.phone}}</td>
+                                <td>{{item.email}}</td>
+                                <td>{{item.lv}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div class="modal fade" id="createHubModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 70%; height: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Añadir responsable</h4>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">X</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Ingrese los datos del responsable</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row text-center">
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="createName" style="cursor: pointer;" placeholder="Nombre Completo">
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="createPhone" style="cursor: pointer;" placeholder="Teléfono">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row text-center">
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="createEmail" style="cursor: pointer;" placeholder="Correo Electrónico">
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="createLv" style="cursor: pointer;" placeholder="Nivel del responsable">
+                        </div>
+                    </div>
+                    <hr />
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-4">
+                    <button class="btn btn-success text-center" type="button" ng-click="createDirectoryHub()">Crear</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal" ng-click="closeModal()">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateHubModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 70%; height: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Actualizar responsable(s)</h4>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">X</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Ingrese los nuevos datos del responsables</label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row text-center">
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="hubName" style="cursor: pointer;" placeholder="Nombre Completo" >
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="hubPhone" style="cursor: pointer;" placeholder="Teléfono">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row text-center">
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="hubEmail" style="cursor: pointer;" placeholder="Correo Electrónico">
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="form-control" aria-label="Floating label select example" type="text" id="hubLv" style="cursor: pointer;" placeholder="Nivel del responsable">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 invisible">
+                            <input type="text" id="idHub" style="cursor: pointer;">
+                        </div>
+                    </div>
+                    <br />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row align-content-end">
+                    <div class="col-lg-6">
+                        <button class="btn btn-primary float-end" type="button" ng-click="updateDirectoryHub()">Actualizar</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn btn-danger float-end" type="button" data-dismiss="modal" ng-click="closeModal()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="modal" id="statusModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detalle</h4>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>
+                                Acción completada con éxito
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" value="Regresar" data-dismiss="modal" ng-click="closeModal()">Regresar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header {
+        position: sticky;
+        top: 0;
+    }
+</style>

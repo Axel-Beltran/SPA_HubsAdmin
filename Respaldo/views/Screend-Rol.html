@@ -1,0 +1,762 @@
+
+<div class="main-content-fluid" ng-init='GetRoles();'>
+    <div class="page-content">
+        <div id="main" class="container-fluid">
+
+            <!-- start page title -->
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Configuración de Pantallas</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a>Administración</a></li>
+                                    <li class="breadcrumb-item active">Pantasllas</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-hide="!isLackPayment">
+                    <div class="alert alert-warning" role="alert">
+                        {{messagePayment}}
+                    </div>
+                </div>
+               
+                <!--Inicia información del ScreenRole-->
+                <div class="row" id="CreateScreenRole">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    
+                                    <div class="col-lg-12">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                <div class="row">
+                                                    <div class=" col-md-6">
+                                                        <h5 class="text-primary">CONFIGURACIÓN DE PANTALLAS</h5>
+                                                    </div>
+                                                    <div class="col-md-6" style="text-align:right">
+                                                        <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunningProcess">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
+                                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-show="nsScreen" ng-click="GetProcess()"></i>
+                                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-show="nsScreenFuntion" ng-click="GetRoles()"></i>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="card col-md-12 col-sm-12 col-lg-12">
+                                                        <div class="card-body">
+                                                            <div class="tab-content mt-4">
+                                                                <div class="tab-pane active" id="ProcessScreen-tab" role="tabpanel">
+                                                                    <form>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                    <label for="inputModel">ROL:</label>
+                                                                                    <select ng-change="changeRole(roles.ProcessId,roles.RoleId)" class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="roles"
+                                                                                         ng-options="c as c.RoleName for c in Roles " >                                
+                                                                                         <option value="">Seleccione</option>                                
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                    <div class="form-floating mb-3">
+                                                                                        <label for="inputHub">SPA:</label>
+
+                                                                                        <input type="text" class="form-control" id="inputScreen" ng-value="{{roles.Process.ProcessName}}" ng-model="roles.Process.ProcessName" disabled >
+                                                                                    </div>                                                                              
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                    <label for="inputModel">PANTALLA:</label>                                                                                    
+
+                                                                                    <select  class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="screen"
+                                                                                         ng-options="c as c.ScreenName for c in Screenprocess track by c.ScreenName" >                                
+                                                                                         <option value="">Seleccione</option>                                
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                    <div class="form-floating mb-3">
+                                                                                        <label for="inputHub">DESCRIPCIÓN:</label>
+
+                                                                                        <input type="text" class="form-control" id="inputScreen" ng-value="{{screen.Description}}" ng-model="screen.ScreenName" disabled >
+                                                                                    </div>                                                                              
+                                                                                </div>
+                                                                            </div>                                                                            
+                                                                        </div>
+                                                                        
+                                                                        <div class="row">
+                                                                                                                                                     
+                                                                        </div>
+                                                                        <button type="submit"  ng-click="SaveScreenRole(roles,screen)" name= "guardar" class="btn btn-primary">Guardar</button>
+
+                                                                    </form>
+                                                                </div>
+                                                                
+                                                             
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Finaliza información del ScreenRole-->
+                  <!-- Inicia  Get Pantalla por Rol -->
+                   <div class="row" id="ScreenRol">
+                    <div  class="col-xl-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="float-end">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-primary">PANTALLA POR ROL : {{roles.NameRole}}</h5>
+                                    </div>
+                                    <div class="col-md-6" style="text-align: right">
+                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-click="GetScreenRolesByProcessId()"></i>
+                                        <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunninScreenRole">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table id="ScreenTable" ng-table="tblPaginado" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pantalla</th>
+                                                    <th>Descripción</th>
+                                                    <th>Eliminar</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="Role in $data = (filterListRolesScreen | filter: {  UserName : clientSearch }) | start: (currentPage - 1) * perPage | limitTo: perPage  ">
+                                                <td>{{Role.ProcessScreen.ScreenName}} </td>
+                                                <td>{{Role.ProcessScreen.Description}}</td>
+                                                <td >
+                                                    <a class="btn btn-outline-secondary btn-sm deleted" ng-click="DeleteRoleScreen(Role)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                              
+                                            </tr>
+                                        </table>
+                                    </div>                                       
+                                    </div>
+                                    <div class='btn-group'>
+                                        <button type='button' class='btn btn-primary' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'> <i class="fas fa-angle-left"></i>  <i class="fas fa-angle-left"></i></button>
+                                        <button type='button' class='btn btn-primary' ng-disabled='currentPage >= RoleScrenns.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'> <i class="fas fa-angle-right"></i> <i class="fas fa-angle-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                <!-- Fin  Get Pantalla por Rol -->
+                <div class="row" id="CreateScreenRoleFunction">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    
+                                    <div class="col-lg-12">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                <div class="row">
+                                                    <div class=" col-md-6">
+                                                        <h5 class="text-primary">FUNCIONES POR PANTALLAS</h5>
+                                                    </div>
+                                                    <div class="col-md-6" style="text-align:right">
+                                                        <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunningProcess">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
+                                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-show="nsScreen" ng-click="GetProcess()"></i>
+                                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-show="nsScreenFuntion" ng-click="GetRoles()"></i>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div  class="col-xl-12 col-md-12">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="tab-content mt-4">
+                                                                    <div class="tab-pane active" id="ProcessScreen-tab" role="tabpanel">
+                                                                        <form>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                        <label for="inputModel">PANTALLA:</label>
+
+                                                                                        <select class="form-control" ng-change="GetScreenRoleFucntion(rolesFuction)" aria-label="Floating label select example"
+                                                                                         ng-model="rolesFuction" ng-options="c as c.ProcessScreen.ScreenName for c in filterListRolesScreen" >                                
+                                                                                             <option value="">Seleccione</option>                                
+                                                                                        </select>
+                                                                                       
+                                                                                    </div>
+                                                                                </div> 
+                                                                                <div class="col-md-12">
+                                                                                    
+                                                                                    <div class="form-floating mb-3"  class="custom-select" id="basic" >
+                                                                                        <div class="form-floating mb-3">
+                                                                                            <label for="inputHub">SECCIÓN POR PANTALLA:</label>
+                                                                                            <select class="form-control" aria-label="Floating label select example" ng-model="nmScreenSection" 
+                                                                                               ng-options="c as c.Name for c in screeSectiondtos" >                                
+                                                                                              <option value="">Seleccione</option>                                
+                                                                                           </select>
+                                                                                        </div>                                                                              
+                                                                                    </div>
+                                                                                </div>                                                                           
+                                                                            </div>
+                                                                            
+                                                                            <div class="row">
+                                                                                                                                                         
+                                                                            </div>
+                                                                            <button type="submit"  ng-click="SaveScreenRoleFucntion(rolesFuction,nmScreenSection)" name= "guardar" class="btn btn-primary">Guardar</button>
+    
+                                                                        </form>
+                                                                    </div>
+                                                                    
+                                                                 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                 <!-- Inicia Function por Pantalla -->
+                 <div class="row" id="ScreenRolFunction">
+                    <div  class="col-xl-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="float-end">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-primary">FUNCIÓN POR PANTALLA :</h5>
+                                    </div>
+                                    <div class="col-md-6" style="text-align: right">
+                                        <i class="mdi mdi-update h2 text-info align-middle mb-0 me-3" title="actualizar" ng-click="GetScreenRolesByProcessId()"></i>
+                                        <div class="spinner-border text-primary m-1" role="status" style="text-align: right" ng-hide="!isRunninScreenRole">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table id="ScreenTable" ng-table="tblPaginado" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sección</th>
+                                                    <th>Eliminar</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="functionDto in $data = (filterListScreenRoleFunction | filter: {  UserName : clientSearch }) | start: (currentPage - 1) * perPage | limitTo: perPage  ">
+                                                <td>{{functionDto.Name}} </td>
+                                                <td >
+                                                    <a class="btn btn-outline-secondary btn-sm deleted" ng-click="DeleteScreenFunction(functionDto)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                              
+                                            </tr>
+                                        </table>
+                                    </div>                                       
+                                    </div>
+                                    <div class='btn-group'>
+                                        <button type='button' class='btn btn-primary' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'> <i class="fas fa-angle-left"></i>  <i class="fas fa-angle-left"></i></button>
+                                        <button type='button' class='btn btn-primary' ng-disabled='currentPage >= screenRoleFunction.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'> <i class="fas fa-angle-right"></i> <i class="fas fa-angle-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+                <!-- Fin Pantalla por Rol -->
+
+
+            </div>
+        </div>
+
+        </div>
+        <!-- end page title -->
+
+    </div> <!-- container-fluid -->
+</div>
+
+
+
+<!-- miniSlotModal -->
+<div class="modal fade" id="miniSlotModal" tabindex="-1" aria-labelledby="miniSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h3>Reporte de saturación de Mini Slot </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="tech-companies-1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Porcentaje</th>
+                            <th>Acción</th>
+                            <th>Fecha Planeada</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>{{DeviceReportDTO.MiniSlotDTO.Prioritization != "-" ? DeviceReportDTO.MiniSlotDTO.Prioritization + "%" : "-"}} </th>
+                            <td>{{DeviceReportDTO.MiniSlotDTO.Action}}</td>
+                            <td>{{DeviceReportDTO.MiniSlotDTO.PlannedDate}}</td>
+                            <td>{{DeviceReportDTO.MiniSlotDTO.Responsible}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- downStreamModal -->
+<div class="modal fade" id="downStreamModal" tabindex="-1" aria-labelledby="downStreamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h3>Reporte de saturación de Downstream </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="tech-companies-1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Porcentaje</th>
+                            <th>Acción</th>
+                            <th>Fecha Planeada</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>{{DeviceReportDTO.SaaDownstreamUtilizationDTO != null ? DeviceReportDTO.SaaDownstreamUtilizationDTO.Usage + "%": "Menor a 85%"}} </th>
+                            <td>{{DeviceReportDTO.SaaDownstreamUtilizationDTO != null ? DeviceReportDTO.SaaDownstreamUtilizationDTO.Action : " "}}</td>
+                            <td>{{DeviceReportDTO.SaaDownstreamUtilizationDTO != null ? DeviceReportDTO.SaaDownstreamUtilizationDTO.PlannedDate: " "}}</td>
+                            <td>{{DeviceReportDTO.SaaDownstreamUtilizationDTO != null ? DeviceReportDTO.SaaDownstreamUtilizationDTO.Responsible: " "}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- clientModal -->
+<div id="clientByAccountNumberModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row" style="text-align:center">
+                    <h5>Búsqueda de dispositivos por cuenta</h5>
+                </div>
+                <br />
+                <div class="row">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Llave de dispositivo</th>
+                                <th>Modelo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="itemDevice in devicesByAccount">
+                                <td>{{itemDevice.DeviceKey}}</td>
+                                <td>{{itemDevice.VendorModel}}</td>
+                                <td>
+                                    <button type="button" class="btn waves-effect waves-light" style="background-color: #00b0ac; color: white" ng-hide="itemDevice.VendorModel == 'NO SOPORTADO'" ng-click="searchDeviceByAccount(itemDevice.DeviceKey)">Seleccionar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="row">
+                    <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white;" data-bs-dismiss="modal" ng-click="cancelClientByAccountNumberModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- deviceKeyModal -->
+<div id="deviceKeyModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Información de: {{deviceKey}}</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Modelo</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="vendorModel" ng-change="setVisible()"
+                                ng-options="option as option.VendorModel for option in deviceVendorModelsDTO">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row" ng-hide="!visible">
+                    <label class="col-md-2 col-form-label">Gestor</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="selectedInstance" ng-change="getSpeedFtpServerHubsByInstance()"
+                                ng-options="item as item.Alias for item in catInstances| orderBy: 'Alias'">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row" ng-hide="!visibleHub">
+                    <label class="col-md-2 col-form-label">Hub</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="selectedHub"
+                                ng-options="item as item.Hub for item in speedFtpServerHubDTOs" ng-disabled="chargingHubs">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="spinner-border text-primary m-1" role="status" ng-hide="!chargingHubs" required>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row" ng-hide="!isHybrid">
+                    <label class="col-md-2 col-form-label">Docsis Version</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="hfcVersion">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in HfcVersions" value="{{option.Key}}" ng-disabled="!{{option.Value}}"> {{option.Key}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row" ng-hide="!isAxtel">
+                    <div class="col-md-10">
+                        <div class="form-check form-check-right mb-3">
+                            <input class="form-check-input" type="checkbox" id="axtelCheck">
+                            <label class="form-check-label" for="axtelCheck">
+                                Cliente Axtel
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="closeModal()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- changePasswordModal -->
+<div id="changePasswordModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Cambio de contraseña por banda</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Banda</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="selectedBand">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in bands" value="{{option.BandCode}}"> {{option.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Contraseña</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" ng-model="selectedPassword" id="selectedPassword" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect" style="background-color: #00b0ac; color: white" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="savePassword(selectedBand, selectedPassword)">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- bandSteeringModal -->
+<div id="bandSteeringModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Band Steering</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Acción</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="selectedAction">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in actions" value="{{option.Name}}"> {{option.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-md-2 col-form-label">SSID</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" ng-model="selectedSSID" id="selectedSSID" required />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Contraseña</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" ng-model="passwordSSID" id="passwordSSID" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect" style="background-color: #00b0ac; color: white" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="confirmBandSteering(selectedAction, selectedSSID, passwordSSID)">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- wirelessModal -->
+<div id="wirelessModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Encender/Apagar Wifi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Banda</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="wirelessBand">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in bandsWireless" value="{{option.BandCode}}"> {{option.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Acción</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="wirelessStatus">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in statuses" value="{{option.StatusCode}}"> {{option.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect" style="background-color: #00b0ac; color: white" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="turnOnOffWireless(wirelessBand, wirelessStatus)">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- changeSSIDModal -->
+<div id="changeSSIDModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Cambio de SSID por banda</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-md-2 col-form-label">Banda</label>
+                    <div class="col-md-10">
+                        <select class="form-select" ng-model="selectedSSIDBands">
+                            <option value="">Seleccione</option>
+                            <option ng-repeat="option in SSIDBands" value="{{option.BandCode}}"> {{option.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <label class="col-md-2 col-form-label">SSID</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" ng-model="inputSSID" id="inputSSID" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn waves-effect" style="background-color: #00b0ac; color: white" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="confirmSSIDChange(selectedSSIDBands, inputSSID)">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- duplicatePortModal -->
+<div id="duplicatePortModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Puerto duplicado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Rack</th>
+                                    <th>Shelf</th>
+                                    <th>Slot</th>
+                                    <th>Port</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in  symphonicaONTUnregistered">
+                                    <td>{{item.SsId}}</td>
+                                    <td>{{item.rack}}</td>
+                                    <td>{{item.slot}}</td>
+                                    <td>{{item.port}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- suggestionBoxModal -->
+<div id="suggestionBoxModal" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5>Buzón de sugerencias</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl col-sm-6">
+                        <div class="form-group mt-3 mb-0">
+                            <label>Tipo</label>
+                            <select class="form-select" id="typeSuggestion">
+                                <option value="R">Reporte de error</option>
+                                <option value="Q">Queja</option>
+                                <option value="S">Sugerencia</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl col-sm-6">
+                        <div class="form-group mt-3 mb-0">
+                            <label>Estado</label>
+                            <select class="form-select" id="statusSuggestion" disabled>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Resuelto">Resuelto</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Comentario</label>
+                        <textarea type="text" class="form-control" placeholder="Ingrese comentario" id="commentSuggestion" ng-model="commentSuggestion" maxlength="250"></textarea>
+                        <label ng-hide="!checkComment" class="text-danger">Ingrese un comentario</label>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="file" class="form-control" id="fileSuggestion" onchange="upload()" />
+                        <label>*El archivo debe ser menor a 2MB</label>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <button type="button" class="btn waves-effect waves-light" style="background-color: #d22176; color: white" ng-click="saveSuggestion()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- traceModal -->
+<div class="modal fade" id="traceModal" tabindex="-1" aria-labelledby="miniSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h3>Traza </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="tech-companies-1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No. salto</th>
+                            <th>Salto</th>
+                            <th>Tiempo de ejecución</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in  traceDTOs">
+                            <td>{{item.Id}}</td>
+                            <td>{{item.Trace}}</td>
+                            <td>{{item.Time}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

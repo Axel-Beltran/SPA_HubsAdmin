@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SPA_HubsAdmin", ".", "{89BB24DB-E19D-40FE-A69F-CD18C7805BD6}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_49532"
+		Debug.AspNetCompiler.PhysicalPath = "..\SPA_HubsAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49532\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_49532"
+		Release.AspNetCompiler.PhysicalPath = "..\SPA_HubsAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49532\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "49532"
+		SlnRelativePath = "..\SPA_HubsAdmin\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89BB24DB-E19D-40FE-A69F-CD18C7805BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89BB24DB-E19D-40FE-A69F-CD18C7805BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9887E725-DFDB-47E7-984B-E901D5B4748C}
+	EndGlobalSection
+EndGlobal

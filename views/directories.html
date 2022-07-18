@@ -1,0 +1,376 @@
+﻿<body ng-app="HubsAdminApp" ng-controller="HubsAdminController">
+    <div class="content">
+        <div class="container">
+            <h2 class="mb-5">Directorio de Hubs</h2>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-success" ng-click="openCreateModal()">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="dripicons-user-group"></i></div>
+                        <input type="text" class="form-control" ng-model="directoriesSearch" placeholder="Filtro de Hubs">
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+                <div class="table-responsive">
+                    <div style="height: 420px;overflow: scroll;">
+                        <table class="table-fixed table table-bordered table-hover table-striped" id="tech-companies-1">
+                            <thead style="position: sticky;top: 0" class="thead-dark">
+                                <tr>
+                                    <th class="header text-center" scope="col">Editar</th>
+                                    <th class="header text-center" scope="col">Eliminar</th>
+                                    <th class="header text-center" scope="col">Hub</th>
+                                    <th class="header text-center" scope="col">Zona</th>
+                                    <th class="header text-center" scope="col">Vendor</th>
+                                    <th class="header text-center" scope="col">Direccion</th>
+                                    <th class="header text-center" scope="col">Estado</th>
+                                    <th class="header text-center" scope="col">Método de Acceso</th>
+                                    <th class="header text-center" scope="col">Malla exterior</th>
+                                    <th class="header text-center" scope="col">Disponibilidad</th>
+                                    <th class="header text-center" scope="col">HUB/OLT Equivalente</th>
+                                    <th class="header text-center" scope="col">SLA-MDR</th>
+                                    <th class="header text-center" scope="col">SLA-Proveedor Interno/Externo</th>
+                                    <th class="header text-center" scope="col">Responsable Nivel 1 </th>
+                                    <th class="header text-center" scope="col">Responsable Nivel 2 </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-active" ng-repeat="item in service.getDirectories.response.getDirectoriesResponse | filter: directoriesSearch">
+                                    <td class="text-center">
+                                        <button type="button" id="updateButton" class="btn btn-warning" ng-click="getDirectoryById(item)">
+                                            <i class="bi bi-box-arrow-in-up-right"></i>
+                                        </button>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger" ng-click="deleteDirectory(item.id)">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.zone.name}}</td>
+                                    <td>{{item.vendor.name}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.state.name}}</td>
+                                    <td>{{item.accessType.accessMethod}}</td>
+                                    <td>{{item.outerMesh}}</td>
+                                    <td>{{item.availability}}</td>
+                                    <td>{{item.hubOlt}}</td>
+                                    <td>{{item.slaMdr}}</td>
+                                    <td>{{item.slaSupplierOutInn}}</td>
+                                    <td>{{item.directoryHub.name}} {{item.directoryHub.phone}} {{item.directoryHub.email}}</td>
+                                    <td>{{item.directoryHub2.name}} {{item.directoryHub2.phone}} {{item.directoryHub2.email}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+<div class="modal fade" id="updateDirectoryModal" tabindex="-1" style="width: 100%; height: 550px !important" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Actualizar registro de Hub</h4>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">X</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Ingrese los datos del correspondientes</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Nombre del Hub:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directoryName" style="cursor: pointer;" placeholder="Nombre del Hub">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Dirección:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directoryAddress" style="cursor: pointer;" placeholder="Dirección">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Proveedor: </label>
+                                <select id="vendorId" class="form-control">
+                                    <option ng-selected="vendorId == item.id" ng-repeat="item in service.getVendors.response.vendorResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Estado: </label>
+                                <select id="stateId" class="form-control">
+                                    <option ng-selected="stateId == item.id" ng-repeat="item in service.getStates.response.stateResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Zona: </label>
+                                <select id="zoneId" class="form-control">
+                                    <option ng-selected="zoneId == item.id" ng-repeat="item in service.getZones.response.zoneResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Tipo de Acceso: </label>
+                                <select id="accessTypeId" class="form-control">
+                                    <option ng-selected="accessTypeId == item.id" ng-repeat="item in service.getAccessTypes.response.accessTypeResponse" value="{{item.id}}">{{item.accessMethod}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Malla externa:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directoryOuterMesh" style="cursor: pointer;" placeholder="Malla externa">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Disponibilidad:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directoryAvailability" style="cursor: pointer;" placeholder="Disponibilidad">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Hub/OLT Equivalente:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directoryHubOlt" style="cursor: pointer;" placeholder="Hub Olt">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>SLA/MDR:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directorySlaMdr" style="cursor: pointer;" placeholder="Sla MDR">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>SLA-Proveedor Interno Externo:</label>
+                                <br />
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="directorySlaSupplierOutInn" style="cursor: pointer;" placeholder="slaSupplierOutInn">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Responsable Nivel 1: </label>
+                                <select id="directoryHubId" class="form-control">
+                                    <option ng-selected="directoryHubId == item.id" ng-repeat="item in service.getDirectoryHubs.response.directoryHubResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Responsable Nivel 2: </label>
+                                <select id="directoryHubId2" class="form-control">
+                                    <option ng-selected="directoryHubId2 == item.id" ng-repeat="item in service.getDirectoryHubs.response.directoryHubResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 invisible">
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="idRoot" style="cursor: pointer;">
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <br />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row align-content-end">
+                    <div class="col-lg-6">
+                        <button class="btn btn-primary float-end" type="button" ng-click="updateDirectory()">Actualizar</button> 
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn btn-danger float-end" type="button" data-dismiss="modal" ng-click="closeModal()">Cancelar</button>
+                    </div>
+                </div>               
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createDirectoryModal" tabindex="-1" style="width: 100%; height: 550px !important" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Añadir Hub</h4>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="closeModal()">X</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Ingrese los datos correspondientes</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Nombre del Hub:</label>
+                                <input  class="form-control" aria-label="Floating label select example" type="text" id="Name" style="cursor: pointer;" placeholder="Nombre del Hub">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Dirección:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="Address" style="cursor: pointer;" placeholder="Dirección">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Proveedor: </label>
+                                <select id="newVendorId" class="form-control">
+                                    <option ng-repeat="item in service.getVendors.response.vendorResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Estado: </label>
+                                <select id="newStateId" class="form-control">
+                                    <option ng-repeat="item in service.getStates.response.stateResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Zona: </label>
+                                <select id="newZoneId" class="form-control">
+                                    <option ng-repeat="item in service.getZones.response.zoneResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Tipo de Acceso: </label>
+                                <select id="newAccessTypeId" class="form-control">
+                                    <option ng-repeat="item in service.getAccessTypes.response.accessTypeResponse" value="{{item.id}}">{{item.accessMethod}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Malla externa:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="OuterMesh" style="cursor: pointer;" placeholder="Malla externa">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Disponibilidad:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="Availability" style="cursor: pointer;" placeholder="Disponibilidad">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Hub/OLT Equivalente:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="HubOlt" style="cursor: pointer;" placeholder="Hub Olt">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>SLA/MDR:</label>
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="SlaMdr" style="cursor: pointer;" placeholder="Sla MDR">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>SLA-Proveedor Interno Externo:</label>
+                                <br />
+                                <input class="form-control" aria-label="Floating label select example" type="text" id="SlaSupplierOutInn" style="cursor: pointer;" placeholder="slaSupplierOutInn">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Responsable Nivel 1: </label>
+                                <select id="HubId" class="form-control">
+                                    <option ng-repeat="item in service.getDirectoryHubs.response.directoryHubResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label> Responsable Nivel 2: </label>
+                                <select id="HubId2" class="form-control">
+                                    <option ng-repeat="item in service.getDirectoryHubs.response.directoryHubResponse" value="{{item.id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <br />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row align-content-end">
+                    <div class="col-lg-6">
+                        <button class="btn btn-primary float-end" type="button" ng-click="createDirectory()">Crear</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn btn-danger float-end" type="button" data-dismiss="modal" ng-click="closeModal()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="modal" id="statusModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detalle</h4>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>
+                                Acción completada con éxito
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" value="Regresar" data-dismiss="modal" ng-click="closeModal()">Regresar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header {
+        position: sticky;
+        top: 0;
+    }
+</style>

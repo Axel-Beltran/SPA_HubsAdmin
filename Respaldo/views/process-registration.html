@@ -1,0 +1,347 @@
+<div class="main-content-fluid" ng-init='processInit()'>
+    <div class="page-content">
+        <div id="main" class="container-fluid">
+            <!--start page title-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">ROLES</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a>Administración</a></li>
+                                <li class="breadcrumb-item active">Usuario</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl col-sm-6">
+                    <div class="form-group mt-3 mb-0">
+                        <label>Sitio DNN</label>
+                        <div class="input-group" ng-show="tabSaveDashboard">
+                            <select class="form-control" id="optionType" ng-model="siteDNNModel"
+                                ng-options="o as o.Name + ' - ' + o.Description for o in responseDashboardGeneric"
+                                ng-change="AddDashBoardProcess(siteDNNModel) | orderBy : 'o'">
+                                <option value="">Tableros disponibles de DNN*</option>
+                            </select>
+                            <button class="btn btn-primary" type="button" ng-click="SaveProcess()"><i class="bx bx-save"></i></button>                           
+                        </div>   
+                        <hr> 
+                        <div class="input-group" ng-show="tabSaveDashboard">
+                            <input type="checkbox" class="form-check-input" ng-model="vm.activo" ng-change="chkOtherDashboard()"/>
+                            <label class="form-check-label" for="chkOtherDashboard">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agregar un tablero diferente</label>
+                        </div> 
+                        <hr ng-show="tabOtherDashboard">
+                        <div class="input-group" ng-show="tabOtherDashboard">
+                            <div class="form-group col-lg-4">
+                                <label for="txtNameDashboard">Nombre del Tablero: </label>
+                                <input type="text" class="form-control" ng-model="txtNameDashboard" placeholder="Nombre">
+                                <small class="form-text text-muted">Nombre del nuevo tablero que sera asignado de manera permanente</small>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;
+                            <div class="form-group col-lg-6">
+                                <label for="txtUrl">URL Site: </label>
+                                <input type="text" class="form-control" ng-model="txtUrl" placeholder="URL del sitio">
+                                <small class="form-text text-muted">Url completa asignado por el Usuario</small>
+                            </div>                             
+                        </div>  
+                        <div class="input-group" ng-show="SaveRowProcess">                            
+                            <button class="btn btn-primary" type="button" ng-click="AddDashBoardProcess()"><i class="bx bx-save"></i></button>                            
+                        </div>
+                        <div class="input-group" ng-show="tabEditProcess">                            
+                            <button class="btn btn-primary" type="button" ng-click="UpdateProcess()"><i class="bx bx-edit"></i></button>                            
+                        </div>                 
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="processTable" ng-table="tblPaginado" class="table table-bordered dt-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre del Proceso</th>
+                                                <th>Url</th>  
+                                                <th>Editado</th>                                      
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="process in responseProcess">
+                                            <td>{{process.ProcessName}} </td>
+                                            <td>{{process.ServiceUrl}}</td>                                                                                                                              
+                                            <td>
+                                                <a class="btn btn-outline-secondary btn-sm edit" ng-click="addUpdateProcess(process)">
+                                                    <i class="bx bx-edit-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>                                       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row" id="newUserDiv" style="cursor: pointer;">
+                <div class="col-md-3 pull-left">
+                    <a class="dropdown-icon-item" ng-model="modelUser" ng-click="chkAddRole()"  ng-model="chkAddRole.activo" data-toggle="modal" data-target="#addNewRoleModal">
+                        <i class="fas fa-address-card"></i>
+                        <span>Agregar Nuevo Rol</span>
+                    </a>
+                </div>
+            </div>    
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="processTable" ng-table="tblPaginado" class="table table-bordered dt-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre del Rol</th>
+                                                <th>Descripción</th>
+                                                <th ng-show="tabFormAddRoleProcess">Activo</th>  
+                                                <th>SPA Disponibles actuales</th>  
+                                                <th>URL</th>     
+                                                <th>Editar</th>  
+                                                <th>Activar/Desactivar</th>       
+     
+
+                                            </tr>
+                                        </thead>
+                                        <tr ng-show="tabFormAddRoleProcess">
+                                            <th>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="textNameRole">
+                                                </div>                                                                                                  
+                                            </th>
+                                            <th>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="textDescriptionRole">
+                                                </div>                                                
+                                            </th>
+                                            <th>
+                                                <input type="checkbox" class="form-check-input" ng-model="chkAddRoleActive.1"/>
+                                            </th>
+                 
+                                                                                       
+                                        </tr>
+                                        <tr ng-repeat="roleProcess in responseRoleByProcess">
+                                            <td>{{roleProcess.RoleName}} </td>
+                                            <td>{{roleProcess.Description}}</td>                                                                                                                             
+                                            <td>
+                                                <select ng-change="AddDashBoardProcess(siteDNNModel) | orderBy : 'o'" ng-disabled="disabled == true"
+                                                class="form-select" id="userRolesSelect" aria-label="Floating label select example" ng-model="roleProcess.ProcessId">
+                                                    <option ng-selected="roleProcess.ProcessId == o.ProcessId"
+                                                       ng-repeat="o in responseProcess" value="{{o.RoleId}}">{{o.ProcessName}}
+                                                    </option>        
+                                                </select>                                                
+                                            </td>
+                                            <td>{{roleProcess.Process.ServiceUrl}} </td>
+                                            <td>
+                                                <a class="btn btn-outline-secondary btn-sm edit" title="Editar registro" ng-click="AddUpdateProcessRole(roleProcess)" data-toggle="modal" data-target="#EditModalProcessRole">
+                                                    <i class="bx bx-edit-alt"></i>
+                                                </a> 
+                                            </td>
+                                            <td>
+                                                
+                                             
+                                                <a ng-if="roleProcess.Active == 1" class="btn btn-outline-secondary btn-sm deleted" ng-click="DesavtivateProcessRol(roleProcess,0)">
+                                                    <i class="bx bxs-user-x" title="Desactivar"></i>
+                                                </a>
+                                                <a ng-if="roleProcess.Active == 0 " class="btn btn-outline-secondary btn-sm deleted" ng-click="DesavtivateProcessRol(roleProcess,1)">
+                                                    <i class="bx bx-check-circle" title="Activar"></i>
+                                                </a>
+                                                <a class="btn btn-outline-secondary btn-sm deleted" title="Eliminar registro" ng-click="DeleteProcessRole(roleProcess)">
+                                                    <i class="bx bx-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>                                       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--end page title-->
+    </div>  <!--container-fluid-->
+</div>
+
+<!--</div>-->
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal" id="EditModalProcessRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <center><p class="h4 mb-4">Actualización de Rol</p></center>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            
+
+            <div class="row" id="deviceConnectedCard">
+                <div  class="col-xl-12 col-md-12">
+                <div class="modal-body">
+                    <div class="row">
+                    </div>
+                    <form>
+                        <div class="row mb-4">
+                            <label for="horizontal-firstname-input" class="col-sm-3 col-form-label">NOMBRE DEL ROL :</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="UiProcessRole.RoleName">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-lastname-input" class="col-sm-3 col-form-label">DESCRIPCIÓN :</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="horizontal-lastname-input" ng-model="UiProcessRole.Description">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-active-input" class="col-sm-3 col-form-label">ACTIVO :</label>
+                            <div class="col-sm-9">
+    
+                                <select disabled class="form-control" id="userEstateSelect"  aria-label="Floating label select example" ng-model="UiProcessRole.Active">
+                                    <option value="0">INACTIVO</option>
+                                    <option value="1">ACTIVO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-role-input" class="col-sm-3 col-form-label">SPA ACTUAL :
+                            </label>
+                            <div class="col-sm-9">
+                                <select disabled ng-change="SelectProcess(usuarioSeleccionado)" class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="UiProcessRole.ProcessId">
+                                    <option ng-selected="UiProcessRole.ProcessId == process.ProcessId"
+                                    ng-repeat="process in responseProcess" value="{{process.ProcessId }}">{{process.ProcessName}}
+                                    </option>        
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-role-input" class="col-sm-3 col-form-label">URL :</label>
+                            <div class="col-sm-9">
+                                <label  class="col-sm-3 col-form-label">
+
+                                </label>
+                                <select disabled ng-change="SelectProcess(usuarioSeleccionado)" class="form-control" id="UrlService" aria-label="Floating label select example" ng-model="UiProcessRole.ProcessId">
+                                    <option ng-selected="UiProcessRole.ProcessId == process.ProcessId"
+                                        ng-repeat="process in responseProcess" value="{{process.ProcessId }}">{{process.ServiceUrl}}
+                                    </option>    
+                                     
+                                </select>
+                               
+                            </div>
+                        </div>
+     
+
+                    </form>
+                </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary"  ng-click="UpdateProcessRole();">Actualizar Rol</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade bd-example-modal" id="addNewRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">CREAR ROL</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            
+
+            <div class="row" id="deviceConnectedCard">
+                <div  class="col-xl-12 col-md-12">
+                <div class="modal-body">
+                    <p class="h4 mb-4">CREAR ROL</p>
+                    <div class="row">
+                    </div>
+                    <form>
+                        <div class="row mb-4">
+                            <label for="horizontal-firstname-input" class="col-sm-3 col-form-label">NOMBRE DEL ROL :</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="horizontal-firstname-input" ng-model="UIprocess.RoleName">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-lastname-input" class="col-sm-3 col-form-label">DESCRIPCIÓN :</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="horizontal-lastname-input" ng-model="UIprocess.Description">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-active-input" class="col-sm-3 col-form-label">ACTIVO :</label>
+                            <div class="col-sm-9">
+    
+                                <select  class="form-control" id="userEstateSelect"  aria-label="Floating label select example" ng-model="UIprocess.Active">
+                                    <option value="0">INACTIVO</option>
+                                    <option value="1">ACTIVO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-role-input" class="col-sm-3 col-form-label">SPA ACTUAL :
+                            </label>
+                            <div class="col-sm-9">
+                                <select ng-change="SelectProcess(usuarioSeleccionado)" class="form-control" id="userRolesSelect" aria-label="Floating label select example" ng-model="UIprocess.ProcessId">
+                                    <option  ng-repeat="process in responseProcess" value="{{process.ProcessId }}">
+                                        {{process.ProcessName}}
+                                    </option>        
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="horizontal-role-input" class="col-sm-3 col-form-label">URL :</label>
+                            <div class="col-sm-9">
+                                <label  class="col-sm-3 col-form-label">
+
+                                </label>
+                                <select disabled ng-change="SelectProcess(usuarioSeleccionado)" class="form-control" id="UrlService" aria-label="Floating label select example" ng-model="UIprocess.ProcessId">
+                                    <option ng-selected="UIprocess.ProcessId == process.ProcessId"
+                                        ng-repeat="process in responseProcess" value="{{process.ProcessId }}">{{process.ServiceUrl}}
+                                    </option>    
+                                     
+                                </select>
+                               
+                            </div>
+                        </div>
+     
+
+                    </form>
+                </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary"  ng-click="CreateProcessRol()">Agregar Rol</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
